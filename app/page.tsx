@@ -20,6 +20,7 @@ export default function Home() {
       </div>
       <div className="w-full md:w-1/2 hidden md:flex justify-center">
         <Image
+          className="rounded-xl"
           src="/home.png"
           alt="home image"
           height={500}

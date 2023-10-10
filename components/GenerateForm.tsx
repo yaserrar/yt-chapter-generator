@@ -93,7 +93,6 @@ const GenerateForm = () => {
             The URL of the youtube video you want to generate chapters on.
           </p>
         </div>
-
         <Button disabled={isLoading} onClick={handleSubmit}>
           {isLoading && <Loader2 size={18} className="animate-spin mr-2" />}{" "}
           Gnerate chapters
