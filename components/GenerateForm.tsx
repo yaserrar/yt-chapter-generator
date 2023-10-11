@@ -59,7 +59,7 @@ const GenerateForm = () => {
     <div className="flex h-full items-center flex-wrap">
       <div className="w-full md:w-1/2 items-center p-2">
         <div className="flex flex-col gap-2">
-          <h3 className="text-4xl">Generate Your Chapters</h3>
+          <h3 className="text-4xl font-semibold">Generate Your Chapters</h3>
           <h5 className="text-lg">
             Enter your link and we will generate your chapters within a minute.
           </h5>
@@ -74,6 +74,7 @@ const GenerateForm = () => {
                 Videos without auto-generated transcripts will fail to generate
               </li>
               <li>This does not work on YT Shorts</li>
+              <li>The IP address can be blocked by Youtube {":("}</li>
             </ul>
           </div>
         </div>

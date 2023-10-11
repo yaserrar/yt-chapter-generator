@@ -20,6 +20,7 @@ const DarkModeButton = () => {
   return (
     <Button
       size="icon"
+      variant="outline"
       className="h-8 w-8"
       onClick={(e) => (theme === "dark" ? setTheme("light") : setTheme("dark"))}
     >

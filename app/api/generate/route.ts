@@ -1,7 +1,12 @@
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 var getSubtitles = require("youtube-captions-scraper").getSubtitles;
 var getYouTubeID = require("get-youtube-id");
+
+const { find } = require("lodash");
+import striptags from "striptags";
+import he from "he";
 
 function secondsToMinutes(seconds: number) {
   const minutes = Math.floor(seconds / 60);
@@ -38,6 +43,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     });
 
     const captionsText = transformedCaptions?.join("\n");
+
     if (captionsText) {
       if (captionsText.length > 15000) {
         return NextResponse.json(
@@ -71,7 +77,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     );
   } catch {
     return NextResponse.json(
-      { message: "Could not extract captions" },
+      { message: "Error has occurred" },
       { status: 500 }
     );
   }

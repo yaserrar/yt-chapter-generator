@@ -30,6 +30,7 @@
     "youtube-captions-scraper": "^2.0.0"
   },
   "devDependencies": {
+    "@types/he": "^1.2.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
