@@ -59,24 +59,7 @@ const GenerateForm = () => {
     <div className="flex h-full items-center flex-wrap">
       <div className="w-full md:w-1/2 items-center p-2">
         <div className="flex flex-col gap-2">
-          <h3 className="text-4xl font-semibold">Generate Your Chapters</h3>
-          <h5 className="text-lg">
-            Enter your link and we will generate your chapters within a minute.
-          </h5>
-          <div className=" text-red-500 flex-col gap-2">
-            <p>
-              This application is alpha and has known issues with the following:
-            </p>
-            <ul className="list-disc list-inside text-sm">
-              <li>Videos longer than 15 minutes may fail to generator</li>
-              <li>Non english videos may fail to generate</li>
-              <li>
-                Videos without auto-generated transcripts will fail to generate
-              </li>
-              <li>This does not work on YT Shorts</li>
-              <li>The IP address can be blocked by Youtube {":("}</li>
-            </ul>
-          </div>
+          <h3 className="text-3xl font-semibold">Generate Your Chapters</h3>
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5 my-4">
           <Label htmlFor="url">Youtube Url</Label>
@@ -98,6 +81,21 @@ const GenerateForm = () => {
           {isLoading && <Loader2 size={18} className="animate-spin mr-2" />}{" "}
           Gnerate chapters
         </Button>
+
+        <div className=" text-red-500 flex-col gap-2 mt-4 text-sm">
+          <p>
+            This application is alpha and has known issues with the following:
+          </p>
+          <ul className="list-disc list-inside text-xs">
+            <li>Videos longer than 15 minutes may fail to generator</li>
+            <li>Non english videos may fail to generate</li>
+            <li>
+              Videos without auto-generated transcripts will fail to generate
+            </li>
+            <li>This does not work on YT Shorts</li>
+            <li>The IP address can be blocked by Youtube {":("}</li>
+          </ul>
+        </div>
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-2 p-2">
         <h2 className="text-xl font-semibold">Chapters</h2>
@@ -108,7 +106,7 @@ const GenerateForm = () => {
               00:25 - Installing OpenAI Library ...
             </p>
           ) : (
-            <div className="text-gray-600 relative">
+            <div className="relative">
               {chaptersArray.map((chapter, i) => (
                 <p key={i}>{chapter}</p>
               ))}

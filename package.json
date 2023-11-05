@@ -27,7 +27,8 @@
     "react-dom": "^18",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
-    "youtube-captions-scraper": "^2.0.0"
+    "youtube-captions-scraper": "^2.0.0",
+    "youtube-transcript": "^1.0.6"
   },
   "devDependencies": {
     "@types/he": "^1.2.1",

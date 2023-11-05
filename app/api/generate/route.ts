@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 var getSubtitles = require("youtube-captions-scraper").getSubtitles;
 var getYouTubeID = require("get-youtube-id");
+import { YoutubeTranscript } from "youtube-transcript";
 
 const { find } = require("lodash");
 import striptags from "striptags";
@@ -19,9 +20,9 @@ function secondsToMinutes(seconds: number) {
 }
 
 type Caption = {
-  dur: string;
-  start: string;
   text: string;
+  duration: number;
+  offset: number;
 };
 
 const openai = new OpenAI({
@@ -32,18 +33,15 @@ export async function POST(request: NextRequest, response: NextResponse) {
   const data = (await request.json()) as { url: string };
 
   try {
-    const captions: Caption[] | null = await getSubtitles({
-      videoID: getYouTubeID(data.url),
-      lang: "en",
-    });
+    const transcript = await YoutubeTranscript.fetchTranscript(data.url);
 
-    const transformedCaptions = captions?.map((caption) => {
-      const start = secondsToMinutes(Number(caption.start));
+    const transformedCaptions = transcript?.map((caption) => {
+      const start = secondsToMinutes(Number(caption.offset / 1000));
       return `${start}\n${caption.text}`;
     });
 
     const captionsText = transformedCaptions?.join("\n");
-
+    console.log(captionsText);
     if (captionsText) {
       if (captionsText.length > 15000) {
         return NextResponse.json(
@@ -56,15 +54,23 @@ export async function POST(request: NextRequest, response: NextResponse) {
         messages: [
           {
             role: "system",
-            content:
-              "You create labeled chapters for youtube videos. The transcript you will be given has a timestamp and text for that timestamp. This repeats for the whole transcript. The output should be each timestamp and chapter title. Each chapter title should be no longer than 50 characters. The chapter titles can be keywords, summarized concepts or titles. Only create a new chapter when the topic changes significantly. At least 1 minute should have elapsed before specifying a new chapter. Respect the timestamps specified in the transcript. The chapter timestamps should not be greater than the largest timestamp in the transcript. The output for each line should look like: 00:00 - Title",
+            content: `Task:
+Create YouTube video chapters using timestamped text entries. The input format is:
+MM:SS
+Text
+Requirements:
+Generate concise chapter titles (up to 50 characters) and at least 1 minute should have elapsed before specifying a new chapter.
+Chapter timestamps must not exceed the largest transcript timestamp.The output for each line should look like: 00:00 - Title
+Ensure that chapters match provided timestamps and stay within time boundaries of timestamps provided.`,
           },
           {
             role: "user",
             content: captionsText,
           },
         ],
-        temperature: 0,
+        temperature: 0.5,
+        top_p: 1,
+        // frequency_penalty: 1,
       });
       const chapters = chatCompletion.choices[0].message.content;
       return NextResponse.json(chapters, {
@@ -77,7 +83,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     );
   } catch {
     return NextResponse.json(
-      { message: "Error has occurred" },
+      { message: "Error has occurred or IP address blocked by Youtube" },
       { status: 500 }
     );
   }
